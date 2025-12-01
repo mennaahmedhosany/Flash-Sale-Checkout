@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 
 class Hold extends Model
@@ -26,6 +27,14 @@ class Hold extends Model
         'is_redeemed' => 'boolean',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($hold) {
+            if (!$hold->id) {
+                $hold->id = (string) Str::uuid();
+            }
+        });
+    }
     public function product()
     {
         return $this->belongsTo(Product::class);
