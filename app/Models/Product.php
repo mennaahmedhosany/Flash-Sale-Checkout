@@ -14,8 +14,13 @@ class Product extends Model
         'stock_reserved',
         'version',
     ];
+
     public function holds()
     {
         return $this->hasMany(Hold::class);
+    }
+    public function orders()
+    {
+        return $this->hasManyThrough(Order::class, Hold::class);
     }
 }

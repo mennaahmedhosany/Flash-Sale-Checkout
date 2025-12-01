@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\HoldRequest;
 use App\Http\Resources\HoldResource;
+use App\Jobs\ReleaseExpiredHold;
 use Illuminate\Validation\ValidationException;
 use App\Models\Hold;
 use App\Models\Product;
@@ -36,6 +37,9 @@ class HoldController extends Controller
                 'expires_at' => now()->addMinutes(2),
             ]);
             $product->increment('stock_reserved', $qty);
+            ReleaseExpiredHold::dispatch($hold->id)
+                ->delay($hold->expires_at);
+
             return $hold;
         });
 
