@@ -1,9 +1,9 @@
-🚀 Flash Sale API (High Concurrency & Correctness)
+🚀 ### Flash Sale API (High Concurrency & Correctness)
 
 A robust Laravel 12 API for selling limited-stock products during flash sales.
 Focuses on data correctness, safe concurrency, and reliable stock/order management using MySQL transactions.
 
-📌 Table of Contents
+# 📌 Table of Contents
 
 Core Concepts
 
@@ -49,8 +49,8 @@ Payment webhooks are idempotent using payment_idempotency_key
 
 Prevents duplicate processing of the same payment event
 
-🔗 API Endpoints
-1️⃣ Get Product Details
+### 🔗  API Endpoints
+# 1️⃣ Get Product Details
 
 Method: GET
 
@@ -60,7 +60,7 @@ Description: Returns product info with accurate stock
 
 Caching: Uses Cache::remember for 5 minutes to reduce DB load
 
-2️⃣ Create Hold
+# 2️⃣ Create Hold
 
 Method: POST
 
@@ -91,7 +91,7 @@ Response:
   "expires_at": "2025-12-02T01:00:00Z"
 }
 
-3️⃣ Create Order
+# 3️⃣ Create Order
 
 Method: POST
 
@@ -128,7 +128,7 @@ Success Response (201 Created):
   }
 }
 
-4️⃣ Payment Webhook
+ # 4️⃣ Payment Webhook
 
 Method: POST
 
@@ -213,7 +213,7 @@ PASS  Tests\Feature\InventoryTest
 ✓ webhook before order creation
 Tests: 4 passed (21 assertions)
 
-⚙️ Setup Instructions
+ ### ⚙️ Setup Instructions
 Prerequisites
 
 PHP 8.2+
@@ -239,7 +239,7 @@ Automatic hold release ensures stock is never blocked indefinitely
 
 Idempotent webhooks prevent duplicate/out-of-order events from affecting stock or order integrity
 
-📈 Logging & Monitoring
+## 📈 Logging & Monitoring
 
 Logs all webhook events, critical errors, and stock inconsistencies
 
