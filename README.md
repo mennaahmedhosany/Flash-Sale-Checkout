@@ -1,9 +1,9 @@
-Flash Sale API (High Concurrency & Correctness)
+🚀 Flash Sale API (High Concurrency & Correctness)
 
 A robust Laravel 12 API for selling limited-stock products during flash sales.
-Focuses on data correctness, safe concurrency handling, and reliable stock/order management using MySQL transactions.
+Focuses on data correctness, safe concurrency, and reliable stock/order management using MySQL transactions.
 
-Table of Contents
+📌 Table of Contents
 
 Core Concepts
 
@@ -17,50 +17,54 @@ Concurrency & Safety
 
 Logging & Monitoring
 
-Core Concepts
-1. MySQL Transactional Locking
+🧠 Core Concepts
+1️⃣ MySQL Transactional Locking
 
 All critical operations (holds, orders, payments) are wrapped in DB transactions.
 
 Row-level locks (SELECT ... FOR UPDATE) ensure:
 
-Strong data consistency
+✅ Strong data consistency
 
-No overselling
+✅ No overselling
 
-Safe concurrent access to stock data
+✅ Safe concurrent access to stock
 
-2. Stock Model
+2️⃣ Stock Model
 
 The products table tracks:
 
 Column	Description
 stock_available	Total physical stock available
 stock_reserved	Quantity currently held by active holds
-3. Holds vs Orders
+3️⃣ Holds vs Orders
 
 Hold: Temporary stock reservation (~2 minutes)
 
 Order: Persistent record created from a redeemed hold
 
-4. Idempotency
+4️⃣ Idempotency
 
 Payment webhooks are idempotent using payment_idempotency_key
 
 Prevents duplicate processing of the same payment event
 
-API Endpoints
-1. Get Product Details
+🔗 API Endpoints
+1️⃣ Get Product Details
 
-Method: GET /api/products/{id}
+Method: GET
+
+Endpoint: /api/products/{id}
 
 Description: Returns product info with accurate stock
 
-Caching: Uses Cache::remember for 5 minutes
+Caching: Uses Cache::remember for 5 minutes to reduce DB load
 
-2. Create Hold
+2️⃣ Create Hold
 
-Method: POST /api/holds
+Method: POST
+
+Endpoint: /api/holds
 
 Request Body:
 
@@ -87,9 +91,11 @@ Response:
   "expires_at": "2025-12-02T01:00:00Z"
 }
 
-3. Create Order
+3️⃣ Create Order
 
-Method: POST /api/orders
+Method: POST
+
+Endpoint: /api/orders
 
 Request Body:
 
@@ -122,9 +128,11 @@ Success Response (201 Created):
   }
 }
 
-4. Payment Webhook
+4️⃣ Payment Webhook
 
-Method: POST /api/payments/webhook
+Method: POST
+
+Endpoint: /api/payments/webhook
 
 Description: Updates order status based on payment success/failure
 
@@ -156,7 +164,7 @@ Releases reserved stock back to stock_available
 
 Marks hold as not redeemed
 
-Automated Testing
+🧪 Automated Testing
 
 Feature tests ensure the flash-sale system behaves correctly under high concurrency.
 
@@ -183,11 +191,11 @@ Expired holds release stock_reserved
 
 stock_available remains unchanged
 
-Hold status is marked released with a timestamp
+Hold status marked released with timestamp
 
 Payment Webhook Idempotency
 
-Duplicate webhooks do not affect stock or order status
+Duplicate webhooks do not affect stock/order status
 
 First webhook updates order status and stock correctly
 
@@ -205,7 +213,7 @@ PASS  Tests\Feature\InventoryTest
 ✓ webhook before order creation
 Tests: 4 passed (21 assertions)
 
-Setup Instructions
+⚙️ Setup Instructions
 Prerequisites
 
 PHP 8.2+
@@ -215,24 +223,24 @@ MySQL 5.7+ (InnoDB)
 Composer
 
 Installation
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/<your-username>/<repository-name>.git
+cd <repository-name>
 composer install
 cp .env.example .env
 php artisan key:generate
 php artisan migrate
 php artisan serve
 
-Concurrency & Safety
+🔒 Concurrency & Safety
 
 All stock updates (reserve, redeem, release) use transactions with lockForUpdate
 
-Automatic hold release prevents stock from being blocked indefinitely
+Automatic hold release ensures stock is never blocked indefinitely
 
-Idempotent webhooks ensure duplicate/out-of-order payment events do not affect stock or order integrity
+Idempotent webhooks prevent duplicate/out-of-order events from affecting stock or order integrity
 
-Logging & Monitoring
+📈 Logging & Monitoring
 
-Logs all webhook events and critical errors
+Logs all webhook events, critical errors, and stock inconsistencies
 
 Provides an audit trail for debugging and operational monitoring
