@@ -1,6 +1,7 @@
 Flash Sale API (High Concurrency & Correctness)
 
-A robust Laravel 12 API for selling limited-stock products during flash sales. This project emphasizes data correctness, safe concurrency handling, and reliable stock/order management using MySQL transactions.
+A robust Laravel 12 API for selling limited-stock products during flash sales.
+Focuses on data correctness, safe concurrency handling, and reliable stock/order management using MySQL transactions.
 
 Table of Contents
 
@@ -38,24 +39,24 @@ stock_available	Total physical stock available
 stock_reserved	Quantity currently held by active holds
 3. Holds vs Orders
 
-Hold: Temporary reservation of stock (~2 minutes).
+Hold: Temporary stock reservation (~2 minutes)
 
-Order: Persistent record created from a redeemed hold.
+Order: Persistent record created from a redeemed hold
 
 4. Idempotency
 
-Payment webhooks are idempotent using payment_idempotency_key.
+Payment webhooks are idempotent using payment_idempotency_key
 
-Prevents duplicate processing of the same payment event.
+Prevents duplicate processing of the same payment event
 
 API Endpoints
 1. Get Product Details
 
 Method: GET /api/products/{id}
 
-Description: Returns product info with accurate stock.
+Description: Returns product info with accurate stock
 
-Caching: Uses Cache::remember for 5 minutes to reduce DB load.
+Caching: Uses Cache::remember for 5 minutes
 
 2. Create Hold
 
@@ -69,8 +70,6 @@ Request Body:
 }
 
 
-Description: Temporarily reserves stock for a user.
-
 Behavior:
 
 Starts a DB transaction and locks the product row
@@ -79,7 +78,7 @@ Checks stock availability (stock_available - stock_reserved)
 
 Creates a Hold record and increments stock_reserved
 
-Dispatches a delayed ReleaseExpiredHold job to release unredeemed holds
+Dispatches a delayed ReleaseExpiredHold job
 
 Response:
 
@@ -98,8 +97,6 @@ Request Body:
   "hold_id": 1
 }
 
-
-Description: Converts a valid hold into a pending order.
 
 Behavior:
 
@@ -129,7 +126,7 @@ Success Response (201 Created):
 
 Method: POST /api/payments/webhook
 
-Description: Updates order status based on payment success/failure.
+Description: Updates order status based on payment success/failure
 
 Behavior:
 
@@ -167,7 +164,7 @@ Running Tests
 # Run all tests
 php artisan test
 
-# Run specific test file
+# Run a specific test file
 php artisan test tests/Feature/InventoryTest.php
 
 Tested Scenarios
@@ -228,8 +225,14 @@ php artisan serve
 
 Concurrency & Safety
 
-All stock updates (reserve, redeem, release) use transactions with lockForUpdate.
+All stock updates (reserve, redeem, release) use transactions with lockForUpdate
 
-Automatic hold release prevents stock from being blocked indefinitely.
+Automatic hold release prevents stock from being blocked indefinitely
 
-Idempotent webhooks ensure duplicate or out-of-order payment events do not affect stock or order integrity.
+Idempotent webhooks ensure duplicate/out-of-order payment events do not affect stock or order integrity
+
+Logging & Monitoring
+
+Logs all webhook events and critical errors
+
+Provides an audit trail for debugging and operational monitoring
