@@ -1,4 +1,4 @@
-🚀 ### Flash Sale API (High Concurrency & Correctness)
+###  🚀 Flash Sale API (High Concurrency & Correctness)
 
 A robust Laravel 12 API for selling limited-stock products during flash sales.
 Focuses on data correctness, safe concurrency, and reliable stock/order management using MySQL transactions.
