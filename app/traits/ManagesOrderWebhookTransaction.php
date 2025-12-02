@@ -34,5 +34,6 @@ trait ManagesOrderWebhookTransaction
             ]);
             return false;
         }
+        return true;
     }
 }
