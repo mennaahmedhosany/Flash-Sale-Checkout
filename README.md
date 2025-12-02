@@ -259,6 +259,19 @@ Request Body:
   "hold_id": 1
 }
 
+Success Response (201 Created):
+
+{
+  "data": {
+    "id": 12,
+    "hold_id": 1,
+    "status": "pending_payment",
+    "quantity": 40,
+    "total_amount": "3,999.60",
+    "created_at": "2025-12-02T19:00:26.000000Z",
+    "updated_at": "2025-12-02T19:00:26.000000Z"
+  }
+}
 
 Description: Converts a valid hold into a pending order.
 
@@ -284,13 +297,19 @@ Locks the Order row for safe processing.
 
 Checks payment_idempotency_key to prevent duplicate processing.
 
-On success:
+Success Response:
 
-Marks order as paid
+{
+    "success": true
+}
 
-Decrements both stock_reserved and stock_available.
 
-On failure:
+Failure Responses:
+
+HTTP Code	Response Example
+400	{ "error": "Missing idempotency key" }
+404	{ "error": "Order/Resource not found" }
+500	{ "error": "Internal Server Error" }
 
 Marks order as cancelled
 
