@@ -18,6 +18,7 @@ class HoldController extends Controller
         $productId = $request->product_id;
         $qty = $request->qty;
 
+
         $hold = DB::transaction(function () use ($productId, $qty) {
 
             $product = Product::where('id', $productId)->lockForUpdate()->firstOrFail();
@@ -37,12 +38,11 @@ class HoldController extends Controller
                 'expires_at' => now()->addMinutes(2),
             ]);
             $product->increment('stock_reserved', $qty);
-            ReleaseExpiredHold::dispatch($hold->id)
-                ->delay($hold->expires_at);
 
             return $hold;
         });
-
+        ReleaseExpiredHold::dispatch($hold->id)
+            ->delay($hold->expires_at);
         return new HoldResource($hold);
     }
 }

@@ -8,5 +8,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/products/{id}', [ProductController::class, 'show']);
 Route::post('/holds', [HoldController::class, 'store']);
-Route::post('orders', [OrderController::class, 'store']);
-Route::post('/api/payments/webhook', [OrderController::class, 'handlePaymentWebhook']);
+Route::post('/orders', [OrderController::class, 'store']);
+Route::post('/payments/webhook', [OrderController::class, 'handlePaymentWebhook']);

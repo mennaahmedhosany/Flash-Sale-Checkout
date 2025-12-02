@@ -21,7 +21,7 @@ class ReleaseExpiredHold implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(string $holdId)
+    public function __construct(int $holdId)
     {
         $this->holdId = $holdId;
     }

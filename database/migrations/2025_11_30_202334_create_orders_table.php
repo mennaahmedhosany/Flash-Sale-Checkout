@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained();
-            $table->uuid('hold_id')->unique();
+            $table->unsignedBigInteger('hold_id')->unique();
             $table->foreign('hold_id')->references('id')->on('holds')->cascadeOnDelete();
             $table->string('payment_idempotency_key')->nullable()->unique();
             $table->enum('status', ['pending_payment', 'paid', 'cancelled', 'failed'])->default('pending_payment');

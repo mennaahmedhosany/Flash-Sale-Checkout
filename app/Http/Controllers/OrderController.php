@@ -16,17 +16,18 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends Controller
 {
 
+
     public function store(orderRequest $request)
     {
 
         $order = DB::transaction(function () use ($request) {
             $hold = Hold::where('id', $request['hold_id'])->lockForUpdate()->firstOrFail();
 
-            if ($hold->status !== 'active' || ($hold->expires_at && $hold->expires_at->isPast())) {
+            if ($hold->is_redeemed || $hold->expires_at->isPast()) {
                 abort(400, 'Hold is invalid or expired.');
             }
 
-            $hold->status = 'used';
+            $hold->is_redeemed = true;
             $hold->save();
 
             $product = Product::where('id', $hold->product_id)->lockForUpdate()->first();
@@ -55,6 +56,8 @@ class OrderController extends Controller
         return new OrderResource($order);
     }
 
+
+
     public function handlePaymentWebhook(Request $request)
     {
         $idempotencyKey = $request->header('Idempotency-Key') ?? $request->input('idempotency_key');
@@ -68,6 +71,7 @@ class OrderController extends Controller
         if (!$orderId || !$status) {
             return response()->json(['error' => 'Invalid payload'], 400);
         }
+
 
         try {
             DB::transaction(function () use ($orderId, $status, $idempotencyKey) {
