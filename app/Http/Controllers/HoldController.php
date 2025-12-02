@@ -37,7 +37,9 @@ class HoldController extends Controller
                 'quantity'   => $qty,
                 'expires_at' => now()->addMinutes(2),
             ]);
-            $product->increment('stock_reserved', $qty);
+            $product->stock_reserved += $qty;
+            $product->version += 1;
+            $product->save();
 
             return $hold;
         });

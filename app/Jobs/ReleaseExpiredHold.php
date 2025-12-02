@@ -33,7 +33,7 @@ class ReleaseExpiredHold implements ShouldQueue
                 ->lockForUpdate()
                 ->first();
 
-            if (!$hold || $hold->released_at || $hold->expires_at->isFuture()) {
+            if (!$hold || $hold->released_at || $hold->payment_intent_id || $hold->expires_at->isFuture()) {
                 return;
             }
 
@@ -42,7 +42,9 @@ class ReleaseExpiredHold implements ShouldQueue
                 ->first();
 
             if ($product) {
-                $product->decrement('stock_reserved', $hold->quantity);
+                $product->stock_reserved -= $hold->quantity;
+                $product->version += 1;
+                $product->save();
             }
 
             $hold->update(['released_at' => now()]);

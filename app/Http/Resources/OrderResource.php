@@ -18,6 +18,8 @@ class OrderResource extends JsonResource
             'id'         => $this->id,
             'hold_id'    => $this->hold_id,
             'status'     => $this->status,
+            'quantity'      => $this->qty,
+            'total_amount'  => number_format($this->amount_cents / 100, 2),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

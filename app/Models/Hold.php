@@ -4,15 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Str;
+use App\traits\HasHoldValidation;
 
 
 class Hold extends Model
 {
-    use HasFactory;
+    use HasFactory, HasHoldValidation;
 
-    public $incrementing = false;
-    protected $keyType = 'string';
+
 
     protected $fillable = [
         'id',
@@ -20,10 +19,13 @@ class Hold extends Model
         'quantity',
         'expires_at',
         'is_redeemed',
+        'released_at',
+        'payment_intent_id',
     ];
 
     protected $casts = [
         'expires_at' => 'datetime',
+        'released_at'  => 'datetime',
         'is_redeemed' => 'boolean',
     ];
 
