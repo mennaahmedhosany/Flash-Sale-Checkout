@@ -14,7 +14,6 @@ class Hold extends Model
 
 
     protected $fillable = [
-        'id',
         'product_id',
         'quantity',
         'expires_at',

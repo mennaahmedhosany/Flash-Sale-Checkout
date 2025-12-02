@@ -45,7 +45,8 @@ class PaymentWebhookController extends Controller
                 $order = Order::lockForUpdate()->find($orderId);
 
                 if (!$this->canProcessWebhook($order, $idempotencyKey)) {
-                    return;
+                    Log::warning("Webhook for non-existent order: {$orderId}");
+                    return response()->json(['success' => true], 200);
                 }
 
                 $hold = $order->hold()->lockForUpdate()->first();
